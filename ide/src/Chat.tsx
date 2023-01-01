@@ -285,6 +285,7 @@ class Chat extends React.Component<ChatProps, any> {
       editor: chunkEditor, results, outdated, id,
     } = chunk;
     const isError = results.status === 'failed' && isInitializedEditor(chunkEditor);
+    const isTopChunk = index === 0;
 
     if (results.status === 'failed' && isInitializedEditor(chunkEditor)) { // NOTE(joe): repeat check to satisfy tag check
       chunkResultsPart = (
@@ -351,6 +352,7 @@ class Chat extends React.Component<ChatProps, any> {
             theme: 'default',
             lineWrapping: true,
             extraKeys: { Tab: 'indentAuto' },
+            readOnly: isTopChunk && 'nocursor',
           }}
           onChange={() => {
             this.scheduleUpdate();
@@ -385,17 +387,21 @@ class Chat extends React.Component<ChatProps, any> {
     );
 
     const addButtonTitle = 'Insert new message here';
+    const addButton = !isTopChunk && (
+      <button title={addButtonTitle} className="text-button insert-arrow" onClick={() => this.insertAbove()} type="button">
+        [+]
+      </button>
+    );
 
-    const outdatedClass = outdated ? 'outdated' : '';
-    const pendingRerunClass = technicallyOutdated ? 'partially-outdated' : '';
+    const outdatedClass = !isTopChunk && outdated ? 'outdated' : '';
+    const pendingRerunClass = !isTopChunk && technicallyOutdated ? 'partially-outdated' : '';
     const isErrorClass = isError ? 'chatitor-error' : '';
+    const isTopChunkClass = isTopChunk ? 'chatitor-top-chunk' : '';
 
     return (
       <>
-        <div className={`chat-and-result ${outdatedClass} ${pendingRerunClass} ${isErrorClass}`}>
-          <button title={addButtonTitle} className="text-button insert-arrow" onClick={() => this.insertAbove()} type="button">
-            [+]
-          </button>
+        <div className={`chat-and-result ${outdatedClass} ${pendingRerunClass} ${isErrorClass} ${isTopChunkClass}`}>
+          { addButton }
           { chunkEditorPart }
           { chunkResultsPart }
         </div>

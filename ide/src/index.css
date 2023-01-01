@@ -72,6 +72,12 @@ and overriding of rules. */
   transition: border-radius 0.1s, border-bottom-left-radius 0.1s, min-width 0.1s -0.05s !important;
 }
 
+.chat-layout-compact .chatitor-top-chunk .chat .CodeMirror,
+.chat-layout-normal .chatitor-top-chunk .chat .CodeMirror {
+  background-color: transparent !important;
+  border-bottom: 1px solid #ccc;
+}
+
 .chat-layout-normal .chat .CodeMirror {
   border-radius: 0.9em !important;
   border-bottom-left-radius: 0 !important;
